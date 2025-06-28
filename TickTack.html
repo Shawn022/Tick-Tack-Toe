@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tick Tack Toe</title>
+    <style>
+        *{
+            box-sizing: border-box;
+
+        }
+        .main{
+            padding:15px;
+            margin:auto;
+            /* margin:50px; */
+            width:80vw;
+            max-width:400px;
+        }
+        .heading{
+            border:10px solid rgb(255, 157, 0);
+            border-radius:5px;
+            margin:10px;
+            margin-top:-50px;
+            padding:10px;
+            text-align:center;
+            font-size:22px;
+            color:blue;
+            display:flex;
+            flex-direction: row;
+            justify-content: space-around;
+        }
+        .player{
+            border:5px solid blue;
+            width:48%;
+        }
+        .tray{
+            display:grid;
+            grid-template-columns: repeat(3,1fr);
+            border:10px solid rgb(255, 157, 0);
+            border-radius:5px;
+            padding-right:5px;
+            background:rgb(45, 45, 45);
+            width:60vw;
+            max-width:400px;
+        }
+        .win-button{
+            width:60vw;
+            height:10vw;
+            font-size:40px;
+            max-width:400px;
+            max-height:80px;
+            border-radius:10px;
+        }
+        button{
+            width:18vw;;
+            height:18vw;
+            max-width:118px;
+            max-height:118px;
+            margin:4px;
+            background:white;
+            font-size:60px;
+            color:blue;
+        }
+        button:hover{
+            background:rgb(210, 254, 210);
+        }
+        button:active{
+            background:white;
+        }
+        .current{
+            background:lightgreen;
+        }
+        
+        .win{
+            position:fixed;
+            width:90vw;
+            height:90vh;
+            margin-left:3vw;
+            padding:20px;
+            text-align:center;
+            align-content: center;
+            font-size:72px;
+            color:blue;;
+            border-radius:20px;
+            background:rgb(255, 157, 0);
+        }
+        h1{
+            font-size: 70px;
+            font-weight: 600;
+            background-image:conic-gradient(#553c9a 30%, #ee4b2b 40%, #ee4b2b 70%, #00c2cb 80%, #553c9a);
+            color: transparent;
+            background-clip: text;
+            -webkit-background-clip: text;
+            /* margin:auto; */
+            width:100%;
+            text-align:center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="win" style="display:none;">
+        <h2 id="won"></h2>
+        <button class="win-button" onclick="window.location.reload()">Restart</button>
+    </div>
+    <h1>TICK-TACK-TOE</h1>
+    <div class="main">
+        <div class="heading">
+            <div class="player one current"><h2>X's turn</h2></div>
+            <div class="player two"><h2>O</h2></div>
+        </div>
+        <div class="tray">
+            <button data-num="0" onclick="movePlayed(0)"> </button>
+            <button data-num="1" onclick="movePlayed(1)"> </button>
+            <button data-num="2" onclick="movePlayed(2)"> </button>
+            <button data-num="3" onclick="movePlayed(3)"> </button>
+            <button data-num="4" onclick="movePlayed(4)"> </button>
+            <button data-num="5" onclick="movePlayed(5)"> </button>
+            <button data-num="6" onclick="movePlayed(6)"> </button>
+            <button data-num="7" onclick="movePlayed(7)"> </button>
+            <button data-num="8" onclick="movePlayed(8)"> </button>
+        </div>
+    </div>
+    <script>
+        const player1=document.querySelector('.one');
+        const player2=document.querySelector('.two');
+
+        const arr=[0,0,0,0,0,0,0,0,0];
+        let turn=1;
+        let count=0;
+
+        function movePlayed(x){
+            if(arr[x]!=0) return;
+            else {
+                arr[x]=turn;
+                count=count+1;
+                const butt=document.querySelector(`button[data-num="${x}"]`);
+                if(turn==1) butt.innerHTML="X";
+                if(turn==2) butt.innerHTML="O";
+                console.log(arr);
+                checkWin(turn);
+
+                if (turn==1) turn=2;
+                else if(turn==2) turn=1;
+
+                flipChance(turn);
+
+            }
+        }
+
+        function checkWin(x){
+            if (count<=4) return;
+            else{
+                if( (arr[0]==x && arr[1]==x && arr[2]==x ) || (arr[3]==x && arr[4]==x && arr[5]==x ) ||(arr[6]==x && arr[7]==x && arr[8]==x ) || (arr[0]==x && arr[3]==x && arr[6]==x ) ||(arr[1]==x && arr[4]==x && arr[7]==x ) || (arr[2]==x && arr[5]==x && arr[8]==x ) || (arr[0]==x && arr[4]==x && arr[8]==x )|| (arr[2]==x && arr[4]==x && arr[6]==x )){
+                    matchWon(x);
+                }
+                else if(count==9) matchWon(3);
+
+            }
+        }
+
+        function flipChance(turn){
+            if (turn==1){
+                player1.classList.add('current');
+                player1.innerHTML=`<h2>X's Turn</h2>`;
+                player2.classList.remove('current');
+                player2.innerHTML='<h2>O</h2>';
+            }
+            else if(turn==2){
+                player1.classList.remove('current');
+                player1.innerHTML='<h2>X</h2>';
+                player2.classList.add('current');
+                player2.innerHTML=`<h2>O's Turn</h2>`;
+            }
+        }
+
+        function matchWon(x){
+            const winCard=document.querySelector('.win');
+            console.log(winCard);
+            const winHead=document.querySelector('#won');
+            if (x==1){
+                winHead.innerHTML=`X<br>Won`;
+            }
+            else if(x==2){
+                winHead.innerHTML=`O<br>Won`;
+            }
+            else if(x==3){
+                winHead.innerHTML=`Its A <br>Tie`;
+            }
+            winCard.setAttribute("style","display:solid;");
+        }
+
+    </script>
+</body>
+
+</html>
